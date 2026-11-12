@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex, nofollow" />
 <title>Logs</title>
-<link rel="icon" href="/favicon.ico" />
 <style>
   * { box-sizing: border-box; }
   body {
@@ -16,107 +15,53 @@
     font-size: 13px;
   }
   header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 20px;
-    border-bottom: 1px solid #1c2128;
-    background: #11151a;
-    position: sticky;
-    top: 0;
-    z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 20px; border-bottom: 1px solid #1c2128;
+    background: #11151a; position: sticky; top: 0; z-index: 10;
   }
-  header h1 { margin: 0; font-size: 14px; font-weight: 600; letter-spacing: 0.3px; color: #e6edf3; }
+  header h1 { margin: 0; font-size: 14px; font-weight: 600; color: #e6edf3; }
   header .meta { color: #6e7781; font-size: 12px; }
   .toolbar {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    padding: 12px 20px;
-    border-bottom: 1px solid #1c2128;
-    background: #0d1117;
+    display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+    padding: 12px 20px; border-bottom: 1px solid #1c2128; background: #0d1117;
   }
   .toolbar input[type="password"] {
-    flex: 1;
-    max-width: 320px;
-    padding: 8px 10px;
-    background: #0b0d10;
-    border: 1px solid #1f252c;
-    border-radius: 6px;
-    color: #d4d8dd;
-    font-family: inherit;
-    font-size: 12px;
-    outline: none;
+    flex: 1; min-width: 180px; max-width: 360px;
+    padding: 8px 10px; background: #0b0d10; border: 1px solid #1f252c;
+    border-radius: 6px; color: #d4d8dd; font-family: inherit; font-size: 12px; outline: none;
   }
   .toolbar input[type="password"]:focus { border-color: #2f81f7; }
   .toolbar button {
-    padding: 8px 14px;
-    background: #21262d;
-    border: 1px solid #2f343b;
-    border-radius: 6px;
-    color: #d4d8dd;
-    font-family: inherit;
-    font-size: 12px;
-    cursor: pointer;
+    padding: 8px 14px; background: #21262d; border: 1px solid #2f343b;
+    border-radius: 6px; color: #d4d8dd; font-family: inherit; font-size: 12px; cursor: pointer;
   }
   .toolbar button:hover { background: #2b3138; }
   .toolbar button.primary { background: #1f6feb; border-color: #1f6feb; color: #fff; }
   .toolbar button.primary:hover { background: #2f81f7; }
   .toolbar button.danger { color: #f85149; border-color: #3d1f1f; background: #2a1717; }
   .toolbar button.danger:hover { background: #3a1d1d; }
-
   main { padding: 0 20px 40px; }
   table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-  th, td {
-    text-align: left;
-    padding: 9px 10px;
-    border-bottom: 1px solid #1c2128;
-    vertical-align: top;
-  }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid #1c2128; vertical-align: top; }
   th {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: #6e7781;
-    font-weight: 600;
-    background: #0d1117;
-    position: sticky;
-    top: 49px;
-    z-index: 5;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+    color: #6e7781; font-weight: 600; background: #0d1117;
+    position: sticky; top: 49px; z-index: 5;
   }
   tbody tr:hover { background: #11151a; }
   td.pass { color: #f0883e; font-weight: 600; }
   td.time { color: #6e7781; white-space: nowrap; }
   td.ip { color: #79c0ff; white-space: nowrap; }
-  .ua { color: #8b949e; font-size: 11px; max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ua { color: #8b949e; font-size: 11px; max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; }
   .copy {
-    background: transparent;
-    border: 1px solid #2f343b;
-    color: #8b949e;
-    border-radius: 4px;
-    padding: 2px 6px;
-    font-size: 10px;
-    cursor: pointer;
-    font-family: inherit;
+    background: transparent; border: 1px solid #2f343b; color: #8b949e;
+    border-radius: 4px; padding: 2px 6px; font-size: 10px; cursor: pointer; font-family: inherit;
   }
   .copy:hover { color: #d4d8dd; border-color: #3f444b; }
-  .pager {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    justify-content: center;
-    padding: 20px 0;
-    color: #6e7781;
-  }
+  .pager { display: flex; gap: 8px; align-items: center; justify-content: center; padding: 20px 0; color: #6e7781; }
   .pager button {
-    background: #21262d;
-    border: 1px solid #2f343b;
-    color: #d4d8dd;
-    border-radius: 6px;
-    padding: 6px 12px;
-    font-size: 12px;
-    cursor: pointer;
-    font-family: inherit;
+    background: #21262d; border: 1px solid #2f343b; color: #d4d8dd;
+    border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit;
   }
   .pager button:disabled { opacity: 0.4; cursor: not-allowed; }
   .empty, .error { text-align: center; padding: 60px 20px; color: #6e7781; }
@@ -135,9 +80,9 @@
 
 <div class="toolbar">
   <input id="keyInput" type="password" placeholder="view key" autocomplete="off" />
-  <button class="primary" id="loadBtn">load</button>
-  <button id="refreshBtn">refresh</button>
-  <button class="danger" id="clearBtn">clear</button>
+  <button class="primary" id="loadBtn" type="button">load</button>
+  <button id="refreshBtn" type="button">refresh</button>
+  <button class="danger" id="clearBtn" type="button">clear</button>
 </div>
 
 <main>
