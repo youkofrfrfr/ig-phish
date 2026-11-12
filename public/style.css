@@ -1,21 +1,19 @@
-/* Extracted from Instagram's CSS variables */
+/* Exact variables extracted from the source */
 :root {
-  --ig-primary-background: 12, 16, 20;
-  --ig-primary-text: 248, 249, 249;
-  --ig-secondary-text: 162, 170, 180;
-  --ig-secondary-background: 37, 41, 46;
-  --ig-separator: 43, 48, 54;
-  --ig-primary-button: 74, 93, 249;
-  --ig-primary-button-hover: 65, 80, 247;
-  --ig-input-border: 54, 54, 54;
-  --ig-link: 224, 241, 255;
+  --bg-primary: #0c1014;
+  --bg-secondary: #25292e;
+  --text-primary: #f8f9f9;
+  --text-secondary: #a2aab4;
+  --border-color: #2b3036;
+  --blue-primary: #4a5df9;
+  --blue-hover: #4150f7;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
 body {
   margin: 0;
-  background: rgb(var(--ig-primary-background));
-  color: rgb(var(--ig-primary-text));
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: 14px;
   min-height: 100vh;
@@ -29,7 +27,13 @@ body {
   flex: 1;
 }
 
-.page-container {
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0, 0, 0, 0); border: 0;
+}
+
+.app-wrapper {
   display: flex;
   flex: 1;
   justify-content: center;
@@ -42,27 +46,29 @@ body {
 }
 
 /* Left Side */
-.desktop-left {
+.hero-side {
   flex: 1;
   display: flex;
   justify-content: flex-end;
   max-width: 450px;
 }
-.branding-box {
-  position: relative;
+.hero-content {
   width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
 }
-.insta-logo {
+.hero-logo {
   width: 96px;
   height: 96px;
   display: block;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
-.branding-text h2 {
+.hero-title {
   font-size: 42px;
-  line-height: 1.1;
+  line-height: 1.2;
   font-weight: 500;
-  margin: 0 0 32px;
+  margin: 0 0 30px;
   letter-spacing: -0.5px;
 }
 .gradient-text {
@@ -70,26 +76,20 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.friends-img {
+.hero-graphic {
   width: 100%;
-  max-width: 400px;
   display: block;
 }
 
 /* Right Side */
-.desktop-right {
+.form-side {
   width: 100%;
   max-width: 350px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
 }
 
-.login-container {
-  width: 100%;
-}
-
-.login-title {
+.form-title {
   font-size: 16px;
   font-weight: 600;
   margin: 0 0 16px;
@@ -104,36 +104,36 @@ body {
 .input-group input {
   width: 100%;
   padding: 14px 16px;
-  background: rgb(var(--ig-primary-background));
-  border: 1px solid rgb(var(--ig-input-border));
+  background: transparent;
+  border: 1px solid #3e4042;
   border-radius: 12px;
-  color: rgb(var(--ig-primary-text));
+  color: var(--text-primary);
   font-size: 14px;
   outline: none;
 }
-.input-group input::placeholder { color: rgb(var(--ig-secondary-text)); }
-.input-group input:focus { border-color: rgb(var(--ig-secondary-text)); }
+.input-group input::placeholder { color: var(--text-secondary); }
+.input-group input:focus { border-color: var(--text-secondary); }
 
 #loginBtn {
   width: 100%;
   padding: 14px;
-  background: rgb(var(--ig-primary-button));
+  background: var(--blue-primary);
   color: #fff;
   border: none;
   border-radius: 12px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  margin-top: 8px;
+  margin-top: 4px;
 }
 #loginBtn:disabled { opacity: 0.4; cursor: default; }
-#loginBtn:not(:disabled):hover { background: rgb(var(--ig-primary-button-hover)); }
+#loginBtn:not(:disabled):hover { background: var(--blue-hover); }
 
 .divider {
   display: flex;
   align-items: center;
   margin: 20px 0;
-  color: rgb(var(--ig-secondary-text));
+  color: var(--text-secondary);
   font-size: 13px;
   font-weight: 600;
 }
@@ -141,7 +141,7 @@ body {
   content: "";
   flex: 1;
   height: 1px;
-  background: rgb(var(--ig-separator));
+  background: #3e4042;
 }
 .divider span { padding: 0 16px; }
 
@@ -153,47 +153,53 @@ body {
   width: 100%;
   padding: 14px;
   background: transparent;
-  border: 1px solid rgb(var(--ig-input-border));
+  border: 1px solid #3e4042;
   border-radius: 12px;
-  color: rgb(var(--ig-primary-text));
+  color: var(--text-primary);
   text-decoration: none;
   font-weight: 600;
+  font-size: 14px;
   margin-bottom: 16px;
 }
+.fb-login svg { fill: var(--text-primary); }
 
 .forgot {
   display: block;
   text-align: center;
-  color: rgb(var(--ig-link));
+  color: var(--text-primary);
   text-decoration: none;
   font-size: 14px;
+  font-weight: 500;
   margin-top: 16px;
 }
 
-.signup-container {
+.signup-box {
   width: 100%;
-  border: 1px solid rgb(var(--ig-input-border));
+  border: 1px solid #3e4042;
   border-radius: 12px;
   padding: 16px;
   text-align: center;
+  margin-top: 12px;
 }
-.signup-btn {
-  color: rgb(var(--ig-primary-text));
+.signup-box a {
+  color: var(--text-primary);
   text-decoration: none;
   font-weight: 600;
+  font-size: 14px;
 }
 
-.meta-brand {
+.meta-logo {
   display: flex;
   justify-content: center;
   margin-top: 24px;
 }
+.meta-logo svg { fill: var(--text-primary); }
 
 /* Footer */
 .site-footer {
   padding: 24px;
   font-size: 12px;
-  color: rgb(var(--ig-secondary-text));
+  color: var(--text-secondary);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -209,6 +215,7 @@ body {
   color: inherit;
   text-decoration: none;
 }
+.footer-links a:hover { text-decoration: underline; }
 .footer-bottom {
   display: flex;
   gap: 16px;
@@ -223,8 +230,9 @@ body {
 }
 
 @media (max-width: 875px) {
-  .desktop-left { display: none; }
-  .page-container { padding: 16px; flex-direction: column; justify-content: flex-start; margin-top: 20px;}
-  .login-container, .signup-container { border: none; }
-  .desktop-right { max-width: 100%; }
+  .hero-side { display: none; }
+  .app-wrapper { padding: 16px; flex-direction: column; justify-content: flex-start; margin-top: 20px;}
+  .form-side { max-width: 100%; }
+  .form-title, #loginForm, .signup-box, .meta-logo { width: 100%; }
+  .signup-box { border: none; padding: 0; margin-top: 24px; }
 }
