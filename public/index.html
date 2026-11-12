@@ -3,71 +3,72 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="Instagram" />
 <title>Instagram</title>
 <link rel="icon" href="/favicon.ico" />
 <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
 <div id="root">
-  <div class="login-wrap">
-    <div class="login-card">
-      <h1 class="logo" aria-label="Instagram">
-        <svg viewBox="0 0 175 51" height="51" width="175" role="img" aria-label="Instagram">
-          <text x="0" y="40" font-family="'Billabong','Segoe Script','Brush Script MT',cursive"
-                font-size="46" font-style="italic" fill="#262626">Instagram</text>
-        </svg>
-      </h1>
-
-      <form id="loginForm">
-        <label class="field">
-          <input
-            id="username"
-            name="username"
-            type="text"
-            aria-label="Phone number, username, or email"
-            placeholder="Phone number, username, or email"
-            autocomplete="username"
-            autocorrect="off"
-            autocapitalize="off"
-            required
-          />
-        </label>
-        <label class="field">
-          <input
-            id="password"
-            name="password"
-            type="password"
-            aria-label="Password"
-            placeholder="Password"
-            autocomplete="current-password"
-            required
-          />
-        </label>
-
-        <button type="submit" id="loginBtn" disabled>Log in</button>
-      </form>
-
-      <div class="or"><span>OR</span></div>
-
-      <a class="fb-login" href="#">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="#385185">
-          <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
-        </svg>
-        Log in with Facebook
-      </a>
-
-      <a class="forgot" href="#">Forgot password?</a>
+  <div class="desktop-layout">
+    
+    <!-- Left Side (Images) -->
+    <div class="left-panel">
+      <div class="hero-img">
+        <div class="hero-content">
+          <h2>See everyday moments from your <span class="gradient-text">close friends.</span></h2>
+          <div class="phone-mockup">
+            <div class="phone-card">
+              <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400&q=80" alt="friends" />
+            </div>
+            <div class="phone-card overlay">
+              <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=400&q=80" alt="friends" />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="signup-card">
-      Don't have an account? <a href="#">Sign up</a>
-    </div>
+    <!-- Right Side (Form) -->
+    <div class="right-panel">
+      <div class="login-box">
+        <div class="logo">
+          <svg viewBox="0 0 175 51" height="40" width="140" role="img" aria-label="Instagram">
+            <text x="0" y="40" font-family="'Billabong','Segoe Script','Brush Script MT',cursive" font-size="46" font-style="italic" fill="#f5f5f5">Instagram</text>
+          </svg>
+        </div>
 
-    <div class="app-badge">Get the app.</div>
-    <div class="stores">
-      <a href="#"><img alt="Get it on Google Play" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='136' height='40'><rect width='136' height='40' rx='6' fill='%23000'/></svg>" /></a>
-      <a href="#"><img alt="Download on the App Store" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='136' height='40'><rect width='136' height='40' rx='6' fill='%23000'/></svg>" /></a>
+        <form id="loginForm">
+          <div class="input-group">
+            <input id="username" name="username" type="text" placeholder="Mobile number, username or email" autocomplete="username" required />
+          </div>
+          <div class="input-group">
+            <input id="password" name="password" type="password" placeholder="Password" autocomplete="current-password" required />
+          </div>
+          <button type="submit" id="loginBtn" disabled>Log in</button>
+        </form>
+
+        <div class="divider"><span>OR</span></div>
+
+        <button class="fb-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#0095f6" style="vertical-align: middle; margin-right: 8px;">
+            <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+          </svg>
+          Log in with Facebook
+        </button>
+        <a href="#" class="forgot">Forgot password?</a>
+      </div>
+
+      <div class="signup-box">
+        Don't have an account? <a href="#">Sign up</a>
+      </div>
+
+      <div class="app-store">
+        <p>Get the app.</p>
+        <div class="badges">
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='136' height='40'><rect width='136' height='40' rx='6' fill='%23262626'/></svg>" alt="Get it on Google Play" />
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='136' height='40'><rect width='136' height='40' rx='6' fill='%23262626'/></svg>" alt="Download on the App Store" />
+        </div>
+      </div>
     </div>
   </div>
 
