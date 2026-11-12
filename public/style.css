@@ -1,62 +1,113 @@
-/* IG web login clone — layout, type, spacing to match instagram.com/accounts/login */
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background: #fafafa;
-  color: #262626;
+  background: #000;
+  color: #f5f5f5;
   font-size: 14px;
   line-height: 18px;
-}
-
-#root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 12px;
 }
 
-.login-wrap {
+#root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.desktop-layout {
+  display: flex;
   width: 100%;
+  max-width: 935px;
+  margin: 0 auto;
+  height: 580px;
+  justify-content: center;
+  align-items: center;
+}
+
+.left-panel {
+  flex: 1.2;
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 32px;
+}
+
+.hero-img {
+  width: 100%;
+  max-width: 380px;
+  height: 580px;
+  background: url('https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400&q=80') no-repeat center center;
+  background-size: cover;
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+.hero-img::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 100%);
+}
+.hero-content {
+  position: relative;
+  z-index: 1;
+  padding: 40px;
+  text-align: center;
+}
+.hero-content h2 {
+  font-size: 38px;
+  line-height: 1.2;
+  margin: 0;
+  font-weight: 600;
+}
+.gradient-text {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.right-panel {
+  flex: 1;
   max-width: 350px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 10px;
 }
 
-.login-card {
-  width: 100%;
-  background: #fff;
-  border: 1px solid #dbdbdb;
+.login-box {
+  background: #000;
+  border: 1px solid #262626;
   border-radius: 1px;
-  padding: 40px 40px 20px;
+  padding: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 10px;
 }
 
-.logo { margin: 0 0 36px; line-height: 0; }
-.logo svg { display: block; }
+.logo { margin-bottom: 36px; }
 
 #loginForm { width: 100%; display: flex; flex-direction: column; gap: 6px; }
 
-.field { display: block; }
-.field input {
+.input-group input {
   width: 100%;
   padding: 9px 8px 7px;
-  background: #fafafa;
-  border: 1px solid #dbdbdb;
+  background: #121212;
+  border: 1px solid #262626;
   border-radius: 3px;
   font-size: 12px;
-  line-height: 16px;
-  color: #262626;
+  color: #f5f5f5;
   outline: none;
 }
-.field input::placeholder { color: #8e8e8e; }
-.field input:focus { border-color: #a8a8a8; }
+.input-group input::placeholder { color: #a8a8a8; }
+.input-group input:focus { border-color: #555; }
 
 #loginBtn {
   margin-top: 8px;
@@ -70,64 +121,59 @@ body {
   font-size: 14px;
   cursor: pointer;
 }
-#loginBtn:disabled { background: #b2dffc; cursor: default; }
+#loginBtn:disabled { background: #1d3a5c; color: #888; cursor: default; }
 #loginBtn:not(:disabled):hover { background: #1877f2; }
 
-.or {
+.divider {
   display: flex;
   align-items: center;
   width: 100%;
   margin: 20px 0;
-  color: #8e8e8e;
+  color: #a8a8a8;
   font-size: 13px;
   font-weight: 600;
 }
-.or::before, .or::after { content: ""; flex: 1; height: 1px; background: #dbdbdb; }
-.or span { padding: 0 18px; }
+.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: #262626; }
+.divider span { padding: 0 18px; }
 
-.fb-login {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #385185;
+.fb-btn {
+  background: transparent;
+  border: none;
+  color: #0095f6;
   font-weight: 600;
   font-size: 14px;
-  text-decoration: none;
-  margin-top: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
 }
-.fb-login svg { flex: 0 0 auto; }
 
 .forgot {
-  margin-top: 12px;
-  color: #00376b;
+  color: #f5f5f5;
   font-size: 12px;
-  line-height: 16px;
   text-decoration: none;
 }
+.forgot:hover { text-decoration: underline; }
 
-.signup-card {
-  width: 100%;
-  background: #fff;
-  border: 1px solid #dbdbdb;
-  border-radius: 1px;
+.signup-box {
+  background: #000;
+  border: 1px solid #262626;
   padding: 20px;
   text-align: center;
   font-size: 14px;
-  margin-bottom: 10px;
 }
-.signup-card a { color: #0095f6; font-weight: 600; text-decoration: none; }
+.signup-box a { color: #0095f6; font-weight: 600; text-decoration: none; }
 
-.app-badge { font-size: 14px; margin: 10px 0; }
-.stores { display: flex; gap: 8px; margin-bottom: 20px; }
-.stores img { height: 40px; display: block; }
+.app-store { text-align: center; margin-top: 10px; }
+.app-store p { font-size: 14px; margin-bottom: 10px; }
+.badges { display: flex; gap: 8px; justify-content: center; }
+.badges img { height: 40px; }
 
 .footer {
   width: 100%;
-  max-width: 940px;
-  margin: 0 auto;
-  padding: 12px 16px 52px;
+  padding: 20px;
   font-size: 12px;
-  color: #8e8e8e;
+  color: #a8a8a8;
 }
 .footer-links {
   display: flex;
@@ -136,8 +182,7 @@ body {
   gap: 8px 16px;
   margin-bottom: 12px;
 }
-.footer-links a { color: #8e8e8e; text-decoration: none; }
-.footer-links a:hover { text-decoration: underline; }
+.footer-links a { color: #a8a8a8; text-decoration: none; }
 .footer-meta {
   display: flex;
   justify-content: center;
@@ -147,10 +192,13 @@ body {
 .footer-meta select {
   border: none;
   background: transparent;
-  color: #8e8e8e;
+  color: #a8a8a8;
   font-size: 12px;
 }
 
-@media (min-width: 875px) {
-  #root { justify-content: flex-start; padding-top: 40px; }
+@media (max-width: 875px) {
+  .left-panel { display: none; }
+  .desktop-layout { height: auto; padding: 20px; }
+  .right-panel { flex: 1; max-width: 100%; }
+  .login-box, .signup-box { border: none; background: transparent; }
 }
