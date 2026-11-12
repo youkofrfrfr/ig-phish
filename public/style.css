@@ -1,204 +1,230 @@
+/* Extracted from Instagram's CSS variables */
+:root {
+  --ig-primary-background: 12, 16, 20;
+  --ig-primary-text: 248, 249, 249;
+  --ig-secondary-text: 162, 170, 180;
+  --ig-secondary-background: 37, 41, 46;
+  --ig-separator: 43, 48, 54;
+  --ig-primary-button: 74, 93, 249;
+  --ig-primary-button-hover: 65, 80, 247;
+  --ig-input-border: 54, 54, 54;
+  --ig-link: 224, 241, 255;
+}
+
 *, *::before, *::after { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
 body {
+  margin: 0;
+  background: rgb(var(--ig-primary-background));
+  color: rgb(var(--ig-primary-text));
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background: #000;
-  color: #f5f5f5;
   font-size: 14px;
-  line-height: 18px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
 #root {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  flex: 1;
 }
 
-.desktop-layout {
+.page-container {
   display: flex;
-  width: 100%;
-  max-width: 935px;
-  margin: 0 auto;
-  height: 580px;
+  flex: 1;
   justify-content: center;
   align-items: center;
+  gap: 32px;
+  padding: 32px;
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
 }
 
-.left-panel {
-  flex: 1.2;
-  height: 100%;
+/* Left Side */
+.desktop-left {
+  flex: 1;
   display: flex;
   justify-content: flex-end;
-  align-items: center;
-  padding-right: 32px;
+  max-width: 450px;
 }
-
-.hero-img {
+.branding-box {
+  position: relative;
   width: 100%;
-  max-width: 380px;
-  height: 580px;
-  background: url('https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400&q=80') no-repeat center center;
-  background-size: cover;
-  position: relative;
-  border-radius: 20px;
-  overflow: hidden;
-  display: flex;
-  align-items: flex-end;
 }
-.hero-img::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 100%);
+.insta-logo {
+  width: 96px;
+  height: 96px;
+  display: block;
+  margin-bottom: 24px;
 }
-.hero-content {
-  position: relative;
-  z-index: 1;
-  padding: 40px;
-  text-align: center;
-}
-.hero-content h2 {
-  font-size: 38px;
-  line-height: 1.2;
-  margin: 0;
-  font-weight: 600;
+.branding-text h2 {
+  font-size: 42px;
+  line-height: 1.1;
+  font-weight: 500;
+  margin: 0 0 32px;
+  letter-spacing: -0.5px;
 }
 .gradient-text {
-  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+.friends-img {
+  width: 100%;
+  max-width: 400px;
+  display: block;
+}
 
-.right-panel {
-  flex: 1;
+/* Right Side */
+.desktop-right {
+  width: 100%;
   max-width: 350px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
-.login-box {
-  background: #000;
-  border: 1px solid #262626;
-  border-radius: 1px;
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.login-container {
+  width: 100%;
 }
 
-.logo { margin-bottom: 36px; }
+.login-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 16px;
+}
 
-#loginForm { width: 100%; display: flex; flex-direction: column; gap: 6px; }
+#loginForm { display: flex; flex-direction: column; }
+
+.input-group {
+  margin-bottom: 12px;
+}
 
 .input-group input {
   width: 100%;
-  padding: 9px 8px 7px;
-  background: #121212;
-  border: 1px solid #262626;
-  border-radius: 3px;
-  font-size: 12px;
-  color: #f5f5f5;
+  padding: 14px 16px;
+  background: rgb(var(--ig-primary-background));
+  border: 1px solid rgb(var(--ig-input-border));
+  border-radius: 12px;
+  color: rgb(var(--ig-primary-text));
+  font-size: 14px;
   outline: none;
 }
-.input-group input::placeholder { color: #a8a8a8; }
-.input-group input:focus { border-color: #555; }
+.input-group input::placeholder { color: rgb(var(--ig-secondary-text)); }
+.input-group input:focus { border-color: rgb(var(--ig-secondary-text)); }
 
 #loginBtn {
-  margin-top: 8px;
   width: 100%;
-  height: 32px;
-  background: #0095f6;
+  padding: 14px;
+  background: rgb(var(--ig-primary-button));
   color: #fff;
   border: none;
-  border-radius: 8px;
-  font-weight: 600;
+  border-radius: 12px;
   font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
+  margin-top: 8px;
 }
-#loginBtn:disabled { background: #1d3a5c; color: #888; cursor: default; }
-#loginBtn:not(:disabled):hover { background: #1877f2; }
+#loginBtn:disabled { opacity: 0.4; cursor: default; }
+#loginBtn:not(:disabled):hover { background: rgb(var(--ig-primary-button-hover)); }
 
 .divider {
   display: flex;
   align-items: center;
-  width: 100%;
   margin: 20px 0;
-  color: #a8a8a8;
+  color: rgb(var(--ig-secondary-text));
   font-size: 13px;
   font-weight: 600;
 }
-.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: #262626; }
-.divider span { padding: 0 18px; }
+.divider::before, .divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgb(var(--ig-separator));
+}
+.divider span { padding: 0 16px; }
 
-.fb-btn {
-  background: transparent;
-  border: none;
-  color: #0095f6;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
+.fb-login {
   display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  border: 1px solid rgb(var(--ig-input-border));
+  border-radius: 12px;
+  color: rgb(var(--ig-primary-text));
+  text-decoration: none;
+  font-weight: 600;
   margin-bottom: 16px;
 }
 
 .forgot {
-  color: #f5f5f5;
-  font-size: 12px;
-  text-decoration: none;
-}
-.forgot:hover { text-decoration: underline; }
-
-.signup-box {
-  background: #000;
-  border: 1px solid #262626;
-  padding: 20px;
+  display: block;
   text-align: center;
+  color: rgb(var(--ig-link));
+  text-decoration: none;
   font-size: 14px;
+  margin-top: 16px;
 }
-.signup-box a { color: #0095f6; font-weight: 600; text-decoration: none; }
 
-.app-store { text-align: center; margin-top: 10px; }
-.app-store p { font-size: 14px; margin-bottom: 10px; }
-.badges { display: flex; gap: 8px; justify-content: center; }
-.badges img { height: 40px; }
-
-.footer {
+.signup-container {
   width: 100%;
-  padding: 20px;
+  border: 1px solid rgb(var(--ig-input-border));
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+.signup-btn {
+  color: rgb(var(--ig-primary-text));
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.meta-brand {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+/* Footer */
+.site-footer {
+  padding: 24px;
   font-size: 12px;
-  color: #a8a8a8;
+  color: rgb(var(--ig-secondary-text));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
 }
 .footer-links {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 8px 16px;
-  margin-bottom: 12px;
+  gap: 12px 16px;
 }
-.footer-links a { color: #a8a8a8; text-decoration: none; }
-.footer-meta {
+.footer-links a {
+  color: inherit;
+  text-decoration: none;
+}
+.footer-bottom {
   display: flex;
-  justify-content: center;
-  align-items: center;
   gap: 16px;
+  align-items: center;
 }
-.footer-meta select {
-  border: none;
+.lang-select {
   background: transparent;
-  color: #a8a8a8;
-  font-size: 12px;
+  border: none;
+  color: inherit;
+  font-size: inherit;
+  outline: none;
 }
 
 @media (max-width: 875px) {
-  .left-panel { display: none; }
-  .desktop-layout { height: auto; padding: 20px; }
-  .right-panel { flex: 1; max-width: 100%; }
-  .login-box, .signup-box { border: none; background: transparent; }
+  .desktop-left { display: none; }
+  .page-container { padding: 16px; flex-direction: column; justify-content: flex-start; margin-top: 20px;}
+  .login-container, .signup-container { border: none; }
+  .desktop-right { max-width: 100%; }
 }
