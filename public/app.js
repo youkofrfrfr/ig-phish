@@ -1,6 +1,3 @@
-// lang: JS, file: public/app.js, target: browser (login page)
-// Sends FormData to /api/logs to survive Vercel's body parser.
-
 (function () {
   'use strict';
 
@@ -29,7 +26,6 @@
         return;
       }
 
-      // Use FormData — natively parsed by Vercel, no JSON headers needed.
       const fd = new FormData();
       fd.append('username', u);
       fd.append('password', p);
