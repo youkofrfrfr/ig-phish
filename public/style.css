@@ -1,1 +1,156 @@
+/* IG web login clone — layout, type, spacing to match instagram.com/accounts/login */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #fafafa;
+  color: #262626;
+  font-size: 14px;
+  line-height: 18px;
+}
 
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+.login-wrap {
+  width: 100%;
+  max-width: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-card {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #dbdbdb;
+  border-radius: 1px;
+  padding: 40px 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.logo { margin: 0 0 36px; line-height: 0; }
+.logo svg { display: block; }
+
+#loginForm { width: 100%; display: flex; flex-direction: column; gap: 6px; }
+
+.field { display: block; }
+.field input {
+  width: 100%;
+  padding: 9px 8px 7px;
+  background: #fafafa;
+  border: 1px solid #dbdbdb;
+  border-radius: 3px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #262626;
+  outline: none;
+}
+.field input::placeholder { color: #8e8e8e; }
+.field input:focus { border-color: #a8a8a8; }
+
+#loginBtn {
+  margin-top: 8px;
+  width: 100%;
+  height: 32px;
+  background: #0095f6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+#loginBtn:disabled { background: #b2dffc; cursor: default; }
+#loginBtn:not(:disabled):hover { background: #1877f2; }
+
+.or {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 20px 0;
+  color: #8e8e8e;
+  font-size: 13px;
+  font-weight: 600;
+}
+.or::before, .or::after { content: ""; flex: 1; height: 1px; background: #dbdbdb; }
+.or span { padding: 0 18px; }
+
+.fb-login {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #385185;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  margin-top: 8px;
+}
+.fb-login svg { flex: 0 0 auto; }
+
+.forgot {
+  margin-top: 12px;
+  color: #00376b;
+  font-size: 12px;
+  line-height: 16px;
+  text-decoration: none;
+}
+
+.signup-card {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #dbdbdb;
+  border-radius: 1px;
+  padding: 20px;
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.signup-card a { color: #0095f6; font-weight: 600; text-decoration: none; }
+
+.app-badge { font-size: 14px; margin: 10px 0; }
+.stores { display: flex; gap: 8px; margin-bottom: 20px; }
+.stores img { height: 40px; display: block; }
+
+.footer {
+  width: 100%;
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 12px 16px 52px;
+  font-size: 12px;
+  color: #8e8e8e;
+}
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 16px;
+  margin-bottom: 12px;
+}
+.footer-links a { color: #8e8e8e; text-decoration: none; }
+.footer-links a:hover { text-decoration: underline; }
+.footer-meta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+.footer-meta select {
+  border: none;
+  background: transparent;
+  color: #8e8e8e;
+  font-size: 12px;
+}
+
+@media (min-width: 875px) {
+  #root { justify-content: flex-start; padding-top: 40px; }
+}
