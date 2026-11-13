@@ -3,7 +3,7 @@ import crypto from 'node:crypto';
 import { redis } from '@/lib/redis';
 import { getSession } from '@/lib/session';
 
-const MIN = 50;
+const MIN_CENTS = 5000;
 
 export async function POST(req) {
   const s = getSession();
@@ -13,18 +13,18 @@ export async function POST(req) {
   if (!method || !address || !amount) {
     return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
   }
-  if (amount < MIN) return NextResponse.json({ error: `Min $${MIN}` }, { status: 400 });
+  const cents = Math.round(amount * 100);
+  if (cents < MIN_CENTS) return NextResponse.json({ error: 'Min $50' }, { status: 400 });
 
   const user = await redis.hgetall(`user:${s.id}`);
-  const balance = parseFloat(user.balance) || 0;
-  if (balance < amount) return NextResponse.json({ error: 'Insufficient balance' }, { status: 400 });
+  const balance = parseInt(user.balance) || 0;
+  if (balance < cents) return NextResponse.json({ error: 'Insufficient balance' }, { status: 400 });
 
-  // freeze balance
-  await redis.hincrbyfloat(`user:${s.id}`, 'balance', -amount);
+  await redis.hincrby(`user:${s.id}`, 'balance', -cents);
   const id = crypto.randomBytes(8).toString('hex');
   const request = {
-    id, userId: s.id, userEmail: user.email,
-    method, address, amount,
+    id, userId: s.id, userEmail: user.email, username: user.username,
+    method, address, amountCents: cents,
     status: 'pending',
     createdAt: Date.now(),
   };
