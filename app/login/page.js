@@ -25,13 +25,13 @@ export default function Login() {
   }
 
   return (
-    <div className="container" style={{ maxWidth: 400, paddingTop: 80 }}>
+    <div style={{ maxWidth: 400, margin: '80px auto', padding: 24 }}>
       <div className="card">
         <h2 style={{ marginTop: 0 }}>Log in</h2>
         <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required />
           <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required />
-          {err && <div style={{ color: 'var(--red)', fontSize: 13 }}>{err}</div>}
+          {err && <div style={{ color: 'var(--error)', fontSize: 13 }}>{err}</div>}
           <button type="submit" disabled={busy}>{busy ? 'Logging in…' : 'Log in'}</button>
         </form>
         <p className="muted" style={{ marginTop: 16, textAlign: 'center' }}>
