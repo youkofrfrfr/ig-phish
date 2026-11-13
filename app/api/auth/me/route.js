@@ -8,7 +8,6 @@ export async function GET() {
   const user = await redis.hgetall(`user:${s.id}`);
   if (!user) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
-  // reset daily view counter if new day
   const today = new Date().toISOString().slice(0, 10);
   if (user.lastViewDay !== today) {
     user.todayViews = 0;
@@ -16,9 +15,9 @@ export async function GET() {
   }
 
   const { hash, ...safe } = user;
-  safe.balance = parseFloat(safe.balance) || 0;
-  safe.totalEarned = parseFloat(safe.totalEarned) || 0;
-  safe.referralEarned = parseFloat(safe.referralEarned) || 0;
+  safe.balance = (parseInt(safe.balance) || 0) / 100;
+  safe.totalEarned = (parseInt(safe.totalEarned) || 0) / 100;
+  safe.referralEarned = (parseInt(safe.referralEarned) || 0) / 100;
   safe.referralCount = parseInt(safe.referralCount) || 0;
   safe.todayViews = parseInt(safe.todayViews) || 0;
   return NextResponse.json(safe);
