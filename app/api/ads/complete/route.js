@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { redis } from '@/lib/redis';
 import { getSession } from '@/lib/session';
 
-const REWARD = 0.5;
+const REWARD_CENTS = 50;
 const DAILY_CAP = 20;
 
 export async function POST(req) {
@@ -30,9 +30,9 @@ export async function POST(req) {
 
   await redis.sadd(watchedKey, adId);
   await redis.expire(watchedKey, 86400 * 2);
-  await redis.hincrby(`user:${s.id}`, 'balance', Math.round(REWARD * 100));
-  await redis.hincrby(`user:${s.id}`, 'totalEarned', Math.round(REWARD * 100));
+  await redis.hincrby(`user:${s.id}`, 'balance', REWARD_CENTS);
+  await redis.hincrby(`user:${s.id}`, 'totalEarned', REWARD_CENTS);
   await redis.hincrby(`user:${s.id}`, 'todayViews', 1);
 
-  return NextResponse.json({ ok: true, reward: REWARD });
+  return NextResponse.json({ ok: true, reward: REWARD_CENTS / 100 });
 }
