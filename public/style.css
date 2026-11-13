@@ -1,8 +1,21 @@
+/* Exact :root variables mapped from the source HTML */
+:root {
+  --ig-primary-background: 12, 16, 20;
+  --ig-primary-text: 248, 249, 249;
+  --ig-secondary-text: 162, 170, 180;
+  --ig-secondary-background: 37, 41, 46;
+  --ig-separator: 43, 48, 54;
+  --ig-primary-button: 74, 93, 249;
+  --ig-primary-button-hover: 65, 80, 247;
+  --ig-input-border: 54, 54, 54;
+  --ig-link: 224, 241, 255;
+}
+
 *, *::before, *::after { box-sizing: border-box; }
 body {
   margin: 0;
-  background-color: #000;
-  color: #f5f5f5;
+  background-color: rgb(var(--ig-primary-background));
+  color: rgb(var(--ig-primary-text));
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-size: 14px;
   min-height: 100vh;
@@ -16,95 +29,100 @@ body {
   flex: 1;
 }
 
-/* The Split Layout */
-.split-wrapper {
+/* The exact 50/50 split from the source */
+.app-container {
   display: flex;
   flex: 1;
   width: 100%;
-  max-width: 1000px;
+  max-width: 1050px;
   margin: 0 auto;
+  padding: 32px;
 }
 
-/* LEFT SIDE */
-.left-panel {
+/* LEFT PANEL */
+.left-section {
   flex: 1;
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 40px;
-}
-.left-content {
-  width: 100%;
-  max-width: 450px;
-  display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  padding-right: 60px;
 }
-.logo-box {
-  margin-bottom: 40px;
+.insta-logo {
+  margin-bottom: 30px;
+  width: 100%;
+  max-width: 380px;
 }
-.hero-text {
+.hero-headline {
   font-size: 54px;
   line-height: 1.15;
   font-weight: 400;
   margin: 0 0 40px;
   letter-spacing: -1px;
-  color: #fff;
+  color: rgb(var(--ig-primary-text));
+  width: 100%;
+  max-width: 380px;
 }
-.gradient {
+.hero-gradient {
   background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.hero-graphic-box {
+.hero-image-wrapper {
   width: 100%;
+  max-width: 380px;
+  display: flex;
+  justify-content: flex-start;
 }
-.hero-graphic {
+.hero-image {
   width: 100%;
-  max-width: 400px;
   display: block;
 }
 
-/* RIGHT SIDE */
-.right-panel {
+/* RIGHT PANEL */
+.right-section {
   flex: 1;
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 40px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: 60px;
 }
-.right-content {
+.right-section > * {
   width: 100%;
   max-width: 350px;
 }
-.login-title {
+.login-heading {
   font-size: 16px;
   font-weight: 500;
   margin: 0 0 16px;
 }
+
 #loginForm {
   display: flex;
   flex-direction: column;
 }
-.input-group {
+
+.input-row {
   margin-bottom: 12px;
 }
-.input-group input {
+.input-row input {
   width: 100%;
   padding: 16px;
   background: transparent;
-  border: 1px solid #363636;
+  border: 1px solid rgb(var(--ig-input-border));
   border-radius: 12px;
-  color: #f5f5f5;
+  color: rgb(var(--ig-primary-text));
   font-size: 14px;
   outline: none;
 }
-.input-group input::placeholder { color: #a8a8a8; }
-.input-group input:focus { border-color: #a8a8a8; }
+.input-row input::placeholder { color: rgb(var(--ig-secondary-text)); }
+.input-row input:focus { border-color: rgb(var(--ig-secondary-text)); }
 
 #loginBtn {
   width: 100%;
   padding: 16px;
-  background: #4a5df9;
+  background: rgb(var(--ig-primary-button));
   color: #fff;
   border: none;
   border-radius: 12px;
@@ -113,54 +131,62 @@ body {
   cursor: pointer;
   margin-top: 4px;
 }
-#loginBtn:disabled { background: #242e8d; color: #737d9c; cursor: default; }
-#loginBtn:not(:disabled):hover { background: #4150f7; }
-
-.forgot-row {
-  text-align: center;
-  margin-top: 16px;
-  margin-bottom: 40px;
+#loginBtn:disabled { 
+  background: rgba(var(--ig-primary-button), 0.3); 
+  color: rgba(255, 255, 255, 0.6); 
+  cursor: default; 
 }
-.forgot-row a {
-  color: #f5f5f5;
+#loginBtn:not(:disabled):hover { background: rgb(var(--ig-primary-button-hover)); }
+
+.forgot-link {
+  display: block;
+  text-align: center;
+  color: rgb(var(--ig-primary-text));
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
+  margin-top: 16px;
+}
+.forgot-link:hover { text-decoration: underline; }
+
+.spacer {
+  height: 40px;
 }
 
-.fb-login {
+.fb-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   width: 100%;
   padding: 16px;
-  background: #25292e;
+  background: rgb(var(--ig-secondary-background));
   border: none;
   border-radius: 12px;
-  color: #f5f5f5;
+  color: rgb(var(--ig-primary-text));
   text-decoration: none;
   font-weight: 500;
   font-size: 14px;
   margin-bottom: 16px;
 }
-.fb-login svg { fill: #0095f6; }
+.fb-btn svg { fill: #0095f6; }
 
-.create-account {
+.create-btn {
   display: block;
   width: 100%;
   padding: 16px;
   background: transparent;
-  border: 1px solid #4a5df9;
+  border: 1px solid rgb(var(--ig-primary-button));
   border-radius: 12px;
-  color: #4a5df9;
+  color: rgb(var(--ig-primary-button));
   text-decoration: none;
   text-align: center;
   font-weight: 600;
   font-size: 14px;
 }
+.create-btn:hover { background: rgba(var(--ig-primary-button), 0.1); }
 
-.meta-row {
+.meta-logo {
   display: flex;
   justify-content: center;
   margin-top: 40px;
@@ -171,7 +197,7 @@ body {
   width: 100%;
   padding: 24px;
   font-size: 12px;
-  color: #a8a8a8;
+  color: rgb(var(--ig-secondary-text));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -198,9 +224,10 @@ body {
   outline: none;
 }
 
+/* Exact media query from their code */
 @media (max-width: 875px) {
-  .split-wrapper { flex-direction: column; }
-  .left-panel { display: none; }
-  .right-panel { padding: 24px; justify-content: center; }
-  .site-footer { border-top: 1px solid #262626; }
+  .app-container { flex-direction: column; padding: 16px; }
+  .left-section { display: none; }
+  .right-section { padding-left: 0; align-items: center; }
+  .site-footer { border-top: 1px solid rgb(var(--ig-separator)); margin-top: 24px; }
 }
