@@ -17,8 +17,7 @@ export async function POST(req) {
   if (action === 'approve') {
     await redis.hset(`withdraw:${id}`, { status: 'approved', approvedAt: Date.now() });
   } else {
-    // refund
-    await redis.hincrbyfloat(`user:${w.userId}`, 'balance', parseFloat(w.amount));
+    await redis.hincrby(`user:${w.userId}`, 'balance', parseInt(w.amountCents) || 0);
     await redis.hset(`withdraw:${id}`, { status: 'rejected', rejectedAt: Date.now() });
   }
   await redis.lrem('withdraw:pending', 0, id);
